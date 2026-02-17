@@ -1,9 +1,8 @@
 import os
 from flask import request
 from openai import OpenAI
-from flask import jsonify
 from internal.schema.app_schema import CompletionReq
-from pkg.response import HttpCode, Response
+from pkg.response import success_json,validate_error_json
 
 
 class AppHandler:
@@ -20,7 +19,7 @@ class AppHandler:
         )
         req = CompletionReq()
         if not req.validate():
-            return req.errors
+            return validate_error_json(req.errors)
         # 3. 得到请求响应，然后将OpenAI的响应传给前前端
         completion = client.chat.completions.create(
             model="gpt-4o",
@@ -31,9 +30,9 @@ class AppHandler:
         )
 
         content = completion.choices[0].message.content
-        resp = Response(code=HttpCode.SUCCESS,message="",data={"content":content})
 
-        return jsonify(resp),200
+
+        return success_json({"content":content})
 
 
     def ping(self):
