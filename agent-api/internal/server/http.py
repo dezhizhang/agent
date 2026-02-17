@@ -18,7 +18,7 @@ class Http(Flask):
         router.register_router(self)
 
     def _register_error_handler(self,error:Exception):
-        """<UNK>"""
+        """错误异常处理"""
         # 1. 判断异常信息是否是自定义异常，如果是可以提交message和code等信息
         if isinstance(error,CustomException):
             return json(Response(
