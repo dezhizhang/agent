@@ -1,7 +1,7 @@
-
+import os
 from flask import request
 from openai import OpenAI
-import os
+from internal.schema.app_schema import CompletionReq
 
 
 class AppHandler:
@@ -16,6 +16,9 @@ class AppHandler:
             api_key=os.getenv("OPENAI_API_KEY"),
             base_url=os.getenv("OPENAI_API_BASE"),
         )
+        req = CompletionReq()
+        if not req.validate():
+            return req.errors
         # 3. 得到请求响应，然后将OpenAI的响应传给前前端
         completion = client.chat.completions.create(
             model="gpt-4o",
