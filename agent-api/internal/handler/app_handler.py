@@ -1,7 +1,9 @@
 import os
 from flask import request
 from openai import OpenAI
+from flask import jsonify
 from internal.schema.app_schema import CompletionReq
+from pkg.response import HttpCode, Response
 
 
 class AppHandler:
@@ -27,7 +29,11 @@ class AppHandler:
                 {"role":"user","content":query},
             ]
         )
-        return completion.choices[0].message.content
+
+        content = completion.choices[0].message.content
+        resp = Response(code=HttpCode.SUCCESS,message="",data={"content":content})
+
+        return jsonify(resp),200
 
 
     def ping(self):
