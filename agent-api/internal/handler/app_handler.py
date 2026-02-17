@@ -1,6 +1,9 @@
 
 from flask import request
 from openai import OpenAI
+from dotenv import load_dotenv
+import os
+
 
 class AppHandler:
     """应用控制器"""
@@ -10,7 +13,10 @@ class AppHandler:
         # 1. 提取从接口中获取输入
         query = request.json.get('query')
         # 2. 构建openai客户端，并发起请求
-        client = OpenAI(api_key='sk-zUDelHgZPjOX4eP3tnTcVXRC9cgA8yerufoOMyeM7V9Hx9GM',base_url="https://poloai.top/v1")
+        client = OpenAI(
+            api_key=os.getenv("OPENAI_API_KEY"),
+            base_url=os.getenv("OPENAI_API_BASE"),
+        )
         # 3. 得到请求响应，然后将OpenAI的响应传给前前端
         completion = client.chat.completions.create(
             model="gpt-4o",
@@ -20,7 +26,6 @@ class AppHandler:
             ]
         )
         return completion.choices[0].message.content
-
 
 
     def ping(self):
