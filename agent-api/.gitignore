@@ -1,0 +1,153 @@
+# =========================
+
+# Python
+
+# =========================
+
+**pycache**/
+*.py[cod]
+*$py.class
+*.so
+*.pyd
+*.pyo
+
+# Virtual Environment
+
+.venv/
+venv/
+env/
+ENV/
+.python-version
+
+# Pip
+
+pip-log.txt
+pip-delete-this-directory.txt
+
+# =========================
+
+# Flask
+
+# =========================
+
+instance/
+.webassets-cache
+.flaskenv
+.env
+.env.*
+*.sqlite
+*.db
+
+# =========================
+
+# Testing
+
+# =========================
+
+.coverage
+htmlcov/
+.pytest_cache/
+.tox/
+.nox/
+
+# =========================
+
+# Logs
+
+# =========================
+
+*.log
+logs/
+log/
+
+# =========================
+
+# IDE
+
+# =========================
+
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# =========================
+
+# Build
+
+# =========================
+
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# =========================
+
+# Node (如果前端在一起)
+
+# =========================
+
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# =========================
+
+# Docker
+
+# =========================
+
+docker-compose.override.yml
+*.pid
+
+# =========================
+
+# Secrets
+
+# =========================
+
+secrets.yml
+*.pem
+*.key
+*.crt
+
+# =========================
+
+# OS Files
+
+# =========================
+
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# =========================
+
+# Coverage Reports
+
+# =========================
+
+coverage.xml
+
+# =========================
+
+# Jupyter
+
+# =========================
+
+.ipynb_checkpoints/
+
+# =========================
+
+# AI / ML 常见
+
+# =========================
+
+models/
+checkpoints/
+*.pt
+*.onnx
+*.ckpt
+*.h5
