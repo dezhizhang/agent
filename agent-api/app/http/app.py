@@ -12,7 +12,7 @@ injector = Injector()
 conf = Config()
 
 
-app = Http(__name__, config=conf, router=injector.get(Router))
+app = Http(__name__, conf=conf, router=injector.get(Router))
 
 if __name__ == '__main__':
     app.run(debug=True)
