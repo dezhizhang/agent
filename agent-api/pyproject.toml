@@ -12,6 +12,7 @@ dependencies = [
     "injector>=0.24.0",
     "langchain>=1.2.10",
     "langchain-community>=0.4.1",
+    "langchain-openai>=1.1.10",
     "openai>=2.21.0",
     "psycopg>=3.3.2",
     "pytest>=9.0.2",

@@ -1,29 +1,27 @@
 import os
+from datetime import datetime
 
 import dotenv
-from  datetime import datetime
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_openai import ChatOpenAI
+from langchain_openai import ChatOpenAI,OpenAI
 
 dotenv.load_dotenv()
 
+# 1. 提示词
 prompt = ChatPromptTemplate.from_messages([
     ("system", "你是OpenAI开发的聊天机器人,请回答用户的问题,现在的时间是{now}"),
     ("human", "{query}")
 ]).partial(now=datetime.now())
 
 llm = ChatOpenAI(
+    model="gpt-4o",
+    temperature=0.7,
     api_key=os.getenv("OPENAI_API_KEY"),
     base_url=os.getenv("OPENAI_API_BASE"),
-    model="gpt-4o",
-    temperature=0.8,
 )
 
-ai_messages = llm.batch([
-    prompt.invoke({"query":"你好，你是?"}),
-    prompt.invoke({"query":"请讲一个关于程序员的冷笑话?"}),
-])
+response = llm.invoke(prompt.invoke({"query":"现在是几点,请讲一个程序员的冷笑话"}))
+
+print(response.content)
 
 
-for ai_message in ai_messages:
-    print(ai_message.content)
