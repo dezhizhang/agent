@@ -1,44 +1,34 @@
 import os
+
 import dotenv
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_openai import ChatOpenAI
-from langchain_core.runnables import RunnableParallel
 from langchain_core.runnables import RunnablePassthrough
-
+from langchain_openai import ChatOpenAI
+from langchain_core.callbacks import StdOutCallbackHandler
 
 dotenv.load_dotenv()
 
-def retrieveal(query:str) -> str:
-    """一个摸拟的检索器函数"""
-    print(f"正在检索：{query}")
-    return "我是tom"
 
-prompt = ChatPromptTemplate.from_template("""请根据用户的问题回答，可以参考对应的上下文进行生成。
-<context>
-{context}
-</context>
-用户的提问题：{query}""")
+class LLMOpsCallbackHandler(StdOutCallbackHandler):
+    """自定义LLMOps回调函数"""
+    def on_chat_model_start(self,):
 
-# 构建大语言模型
+prompt = ChatPromptTemplate.from_template("{query}")
+
+# 2 创建大语言模型
 llm = ChatOpenAI(
     model="gpt-4o",
     api_key=os.getenv("OPENAI_API_KEY"),
     base_url=os.getenv("OPENAI_API_BASE"),
+    temperature=0.8
 )
 
-# 构建输出解析器
-parser = StrOutputParser()
-
 # 构建链
-chain = RunnableParallel({
-    "context":lambda x:retrieveal(x),
-    "query":RunnablePassthrough(),
-}) | prompt | llm | parser
+chain = {"query":RunnablePassthrough()} | prompt | llm | StrOutputParser()
 
-# 调用链
-# content = chain.invoke("你好，我是谁?")
-content = chain.invoke({"query":"你好，我是谁"})
+# 调用链并执行
+content = chain.invoke("你好，你是?",config={"callbacks":[StdOutCallbackHandler()]})
 
 print(content)
 
