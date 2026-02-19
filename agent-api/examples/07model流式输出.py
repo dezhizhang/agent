@@ -24,4 +24,3 @@ response  = llm.stream(prompt.invoke({"query":"你能简单介绍一下LLM和LLM
 
 for chunk in response:
     print(chunk.content,flush=True,end="")
-
