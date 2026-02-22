@@ -16,6 +16,7 @@ dependencies = [
     "langchain-community>=0.4.1",
     "langchain-huggingface>=1.2.0",
     "langchain-openai>=1.1.10",
+    "langchain-unstructured>=1.0.1",
     "langchain-weaviate>=0.0.6",
     "markdown>=3.10.2",
     "openai>=2.21.0",
@@ -24,5 +25,5 @@ dependencies = [
     "pytest>=9.0.2",
     "python-dotenv>=1.2.1",
     "sentence-transformers>=5.2.3",
-    "unstructured>=0.20.8",
+    "unstructured[pptx]>=0.20.8",
 ]

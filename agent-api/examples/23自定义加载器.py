@@ -1,0 +1,27 @@
+
+from typing import Iterator
+
+from langchain_core.document_loaders import BaseLoader
+from langchain_core.documents import Document
+
+
+class CustomDocumentLoader(BaseLoader):
+    """自定义文档加载，将文本文件的每一行都解析成document"""
+
+    def __init__(self, file_path: str) -> None:
+        self.file_path = file_path
+
+    def lazy_load(self) -> Iterator[Document]:
+        """加载document"""
+        # 1. 读取对应的文件
+        with open(self.file_path, encoding="utf-8") as f:
+            line_number = 0
+            # 2. 提取文件的每一行
+            for line in f:
+                # 3. 将每一行生成一个Document实例关通过yield返回
+                yield Document(
+                    page_content=line,
+                    metadata={"score": self.file_path, "line_number": line_number},
+                )
+                line_number += 1
+    async def alazy_load(self) -> AsyncIteration[Document]:
