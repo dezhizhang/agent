@@ -1,49 +1,43 @@
 import os
-
+import numpy as np
 import dotenv
-from openai import OpenAI
-from langchain_community.chat_message_histories import FileChatMessageHistory
+from numpy.linalg import  norm
+from langchain_openai import OpenAIEmbeddings
 
 dotenv.load_dotenv()
 
-client = OpenAI(
+
+def cosine_similarity(vec1:list, vec2:list) -> float:
+    """计算传入两个向量的余弦相拟度"""
+    # 1. 计算两个向量的点积
+    dot_product = np.dot(vec1, vec2)
+
+    # 2. 计算向量的长度
+    vec1_norm = norm(vec1)
+    vec2_norm = norm(vec2)
+
+    # 3. 计算余弦相拟度
+    return dot_product / (vec1_norm * vec2_norm)
+
+
+embeddings = OpenAIEmbeddings(
     api_key=os.getenv("OPENAI_API_KEY"),
     base_url=os.getenv("OPENAI_API_BASE"),
+    model="text-embedding-3-small"
 )
 
-chat_history = FileChatMessageHistory("./memory.txt")
+query_vector = embeddings.embed_query("你好我叫tom")
+
+document_vector = embeddings.embed_documents([
+    "你好，我叫tom，我喜欢跑步",
+    "这个喜欢跑步的人叫tom",
+    "哈哈，我是tom"
+])
+
+# 计算余弦相拟度
+print("向量1和向2相拟度",cosine_similarity(document_vector[0],document_vector[1]))
+print("向量1和向量3相似度",cosine_similarity(document_vector[0],document_vector[2]))
 
 
-while True:
-    query = input("Human:")
 
-    if query == "q":
-        exit(0)
-
-    system_prompt = (
-        "你是OpenAI开发的ChatGPT聊天机器人,可以根据相应的上下文回复用户信息，上下文里存放的是人类与你的对话信息"
-        f"<context>{chat_history}</context>\n\n"
-    )
-
-    response = client.chat.completions.create(
-        model="gpt-4o",
-        messages=[
-            {"role":"system","content":system_prompt},
-            {"role":"user","content":query},
-        ],
-        stream=True
-    )
-
-    ai_content = ""
-    for chunk in response:
-        content = chunk.choices[0].delta.content
-        if content is None:
-            break
-        ai_content += content
-        print(content,flush=True,end="")
-    chat_history.add_user_message(query)
-    chat_history.add_ai_message(ai_content)
-
-
-    print("")
 
