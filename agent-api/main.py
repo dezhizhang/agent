@@ -1,7 +1,18 @@
-from langchain_community.document_loaders.generic import GenericLoader
+from langchain_community.document_loaders import UnstructuredFileLoader
+from langchain_text_splitters import RecursiveCharacterTextSplitter,Language
 
-loader = GenericLoader.from_filesystem(".",glob="*.txt",show_progress=True)
+loader = UnstructuredFileLoader("./demo.py")
+documents = loader.load()
 
-for idx,doc in enumerate(loader.lazy_load()):
-    print(f"当前正在加载第{idx}个文件，文件名:{doc.metadata['source']}")
+text_splitter = RecursiveCharacterTextSplitter(
+    language=Language.PYTHON,
+    chunk_size=500,
+    chunk_overlap=50,
+    add_start_index=True
+)
+
+chunks = text_splitter.split_documents(documents)
+
+for chunk in chunks:
+    print(f"块大小:{len(chunk.page_content)} 元数据:{chunk.metadata}")
 
