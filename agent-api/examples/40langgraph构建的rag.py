@@ -41,8 +41,3 @@ agent = create_agent(
 )
 
 print(agent.invoke({"messages":[("human","请我帮我绘制一张小乌")]}))
-
-
-
-
-
