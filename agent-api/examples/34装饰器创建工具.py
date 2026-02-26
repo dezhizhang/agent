@@ -28,5 +28,5 @@ calculator = StructuredTool.from_function(
 print("名字",calculator.name)
 print("描述",calculator.description)
 print("是否返回",calculator.return_direct)
-print("",calculator.invoke({"a":2,"b":3}))
+print("方法调用",calculator.invoke({"a":2,"b":3}))
 
