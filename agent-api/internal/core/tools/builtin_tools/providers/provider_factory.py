@@ -2,6 +2,7 @@ import os.path
 import yaml
 from typing import Any
 from injector import inject,singleton
+from internal.core.tools.builtin_tools.entities import ProviderEntity
 
 @inject
 @singleton
@@ -31,6 +32,9 @@ class ProviderFactory:
 
         # 4. 循环遍历providers.yaml的数据
         for idx,provider_data in enumerate(providers_yaml_data):
+            provider_entity = ProviderEntity(**provider_data)
+            self.provider_tool_map[provider_data['name']] = provider_entity
+
 
 
 
