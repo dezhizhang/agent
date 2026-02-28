@@ -3,6 +3,8 @@ import yaml
 from pydantic import BaseModel
 from typing import Any
 from .tool_entity import ToolEntity
+from internal.lib.helper import dynamic_import
+
 
 
 class ProviderEntity(BaseModel):
@@ -24,8 +26,17 @@ class Provider(BaseModel):
     tool_func_map: dict[str, Any] = {}  # 工具函数映射表
 
     def __init__(self, **kwargs):
+        """构造函数完成对应服务提供商初始化"""
         super().__init__(**kwargs)
         self._provider_init()
+
+    class Config:
+        protected_namespaces = ()
+
+    def get_tool(self,tool_name:str) -> Any:
+        """根据工具名字，来获取到该服务商提供下的指定工具"""
+        return self.tool_func_map.get(tool_name)
+
 
 
     def _provider_init(self):
@@ -47,6 +58,12 @@ class Provider(BaseModel):
                 tool_yaml_data = yaml.safe_load(f)
 
             self.tool_entity_map[tool_name] = ToolEntity(**tool_yaml_data)
+
+            # 动态导入对应的工具并填充到tool_func_map中
+            self.tool_func_map[tool_name] = dynamic_import(
+                f"internal.core.tools.builtin_tools.providers.{self.name}",
+                tool_name
+            )
 
 
 
