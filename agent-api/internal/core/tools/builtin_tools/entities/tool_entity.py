@@ -6,3 +6,5 @@ class ToolEntity(BaseModel):
     name: str
     label: str
     description: str
+    params:list = [] # 工具的参数信息
+    
