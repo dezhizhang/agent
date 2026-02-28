@@ -37,6 +37,14 @@ class Provider(BaseModel):
         """根据工具名字，来获取到该服务商提供下的指定工具"""
         return self.tool_func_map.get(tool_name)
 
+    def get_tool_entity(self,tool_name:str) -> ToolEntity:
+        """根据工具的名字，来获取到该服务提供商下的指定工具的实体/信息"""
+        return self.tool_entity_map.get(tool_name)
+
+
+    def get_tool_entities(self) -> list[ToolEntity]:
+        """获取该服务商下的所有工具实体/信息"""
+        return list(self.tool_entity_map.values())
 
 
     def _provider_init(self):
